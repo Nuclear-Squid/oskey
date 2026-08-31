@@ -22,3 +22,13 @@ description: |
 compatible: "zmk,behavior-os-selector"
 
 include: one_param.yaml
+
+properties:
+  default-os:
+    type: int
+    required: false
+    description: select the default os
+    enum:
+      - 0  # windows
+      - 1  # macOS
+      - 2  # linux
