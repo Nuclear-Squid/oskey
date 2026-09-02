@@ -14,12 +14,12 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 struct os_selector_config {
-    uint8_t default_os;
+    os_variant_t default_os;
 };
 
 static int on_os_selector_binding_pressed(struct zmk_behavior_binding *binding,
                                           struct zmk_behavior_binding_event event) {
-    zmk_oskey_set_os((uint8_t)binding->param1);
+    zmk_oskey_set_os((os_variant_t)binding->param1);
     return ZMK_BEHAVIOR_OPAQUE;
 }
 

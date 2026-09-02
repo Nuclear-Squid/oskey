@@ -8,18 +8,22 @@
 #include <stdint.h>
 
 /* OS identifiers — match the dt-bindings values in oskey.h */
-#define OSKEY_OS_WINDOWS 0
-#define OSKEY_OS_MACOS   1
-#define OSKEY_OS_LINUX   2
+typedef enum {
+    OSKEY_OS_UNSURE,
+    OSKEY_OS_LINUX,
+    OSKEY_OS_WINDOWS,
+    OSKEY_OS_MACOS,
+    OSKEY_OS_IOS,
+} os_variant_t;
 
 /**
  * @brief Get the currently selected operating system.
- * @return One of OSKEY_OS_WINDOWS, OSKEY_OS_MACOS, or OSKEY_OS_LINUX.
+ * @return os_variant_t
  */
-uint8_t zmk_oskey_get_os(void);
+os_variant_t zmk_oskey_get_os(void);
 
 /**
  * @brief Set the currently selected operating system.
- * @param os One of OSKEY_OS_WINDOWS, OSKEY_OS_MACOS, or OSKEY_OS_LINUX.
+ * @param os_variant_t
  */
-void zmk_oskey_set_os(uint8_t os);
+void zmk_oskey_set_os(os_variant_t os);

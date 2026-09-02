@@ -13,9 +13,11 @@ description: |
 
   Then bind it with the OS constant as the parameter:
 
+    &os_sel OS_UNS
+    &os_sel OS_LIN
     &os_sel OS_WIN
     &os_sel OS_MAC
-    &os_sel OS_LIN
+    &os_sel OS_IOS
 
   (requires #include <dt-bindings/zmk/oskey.h> in the keymap file)
 
@@ -29,6 +31,8 @@ properties:
     required: false
     description: select the default os
     enum:
-      - 0  # windows
-      - 1  # macOS
-      - 2  # linux
+      - 0  # unsure
+      - 1  # linux
+      - 2  # windows
+      - 3  # macos
+      - 4  # ios

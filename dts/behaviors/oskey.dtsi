@@ -12,7 +12,20 @@
  *
  */
 
+#include <zephyr/sys/util_macro.h>
 #include <dt-bindings/zmk/keys.h>
+
+#define OSKEY(name, uns, lin, win, mac, ios)        \
+  name: name {                                      \
+    compatible = "zmk,behavior-os-key";             \
+    #binding-cells = <0>;                           \
+    bindings = <uns>                                \
+      , <COND_CODE_0(IS_EMPTY(lin), (lin), (uns))>  \
+      , <COND_CODE_0(IS_EMPTY(win), (win), (uns))>  \
+      , <COND_CODE_0(IS_EMPTY(mac), (mac), (uns))>  \
+      , <COND_CODE_0(IS_EMPTY(ios), (ios), (uns))>  \
+    ;                                               \
+  };
 
 / {
     behaviors {
@@ -26,257 +39,70 @@
 
         /* ── Commands ─────────────────────────────────────────────── */
 
-        ok_cut: os_key_cut {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(X)>, <&kp LG(X)>, <&kp LC(X)>;
-        };
+        // Only MacOS is changed here
+        // bhv name    , Default   ,,, MacOS     ,
+        OSKEY(ok_cut   , &kp LC(X) ,,, &kp LG(X) , )
+        OSKEY(ok_copy  , &kp LC(C) ,,, &kp LG(C) , )
+        OSKEY(ok_paste , &kp LC(V) ,,, &kp LG(V) , )
+        OSKEY(ok_undo  , &kp LC(Z) ,,, &kp LG(Z) , )
 
-        ok_copy: os_key_copy {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(C)>, <&kp LG(C)>, <&kp LC(C)>;
-        };
+        // bhv name    , Default   , Linux         ,, MacOS         ,
+        OSKEY(ok_redo  , &kp LC(Y) , &kp LS(LC(Z)) ,, &kp LS(LG(Z)) , )
 
-        ok_paste: os_key_paste {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(V)>, <&kp LG(V)>, <&kp LC(V)>;
-        };
-
-        ok_undo: os_key_undo {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(Z)>, <&kp LG(Z)>, <&kp LC(Z)>;
-        };
-
-        ok_redo: os_key_redo {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win         Mac                Lin  */
-            bindings = <&kp LC(Y)>, <&kp LS(LG(Z))>, <&kp LS(LC(Z))>;
-        };
-
-        ok_sel_all: os_key_select_all {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(A)>, <&kp LG(A)>, <&kp LC(A)>;
-        };
-
-        ok_find: os_key_find {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(F)>, <&kp LG(F)>, <&kp LC(F)>;
-        };
-
-        ok_find_replace: os_key_find_replace {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(H)>, <&kp LG(H)>, <&kp LC(H)>;
-        };
-
-        ok_bold: os_key_bold {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(B)>, <&kp LG(B)>, <&kp LC(B)>;
-        };
-
-        ok_italic: os_key_italic {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(I)>, <&kp LG(I)>, <&kp LC(I)>;
-        };
-
-        ok_underline: os_key_underline {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(U)>, <&kp LG(U)>, <&kp LC(U)>;
-        };
-
-        ok_new_win: os_key_new_window {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(N)>, <&kp LG(N)>, <&kp LC(N)>;
-        };
-
-        ok_new_tab: os_key_new_tab {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(T)>, <&kp LG(T)>, <&kp LC(T)>;
-        };
-
-        ok_close: os_key_close {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(W)>, <&kp LG(W)>, <&kp LC(W)>;
-        };
-
-        ok_quit: os_key_quit {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win            Mac           Lin  */
-            bindings = <&kp LA(F4)>, <&kp LG(Q)>, <&kp LA(F4)>;
-        };
-
-        ok_reopen_tab: os_key_reopen_tab {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win                Mac               Lin  */
-            bindings = <&kp LS(LC(T))>, <&kp LS(LG(T))>, <&kp LS(LC(T))>;
-        };
-
-        ok_open: os_key_open {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(O)>, <&kp LG(O)>, <&kp LC(O)>;
-        };
-
-        ok_save: os_key_save {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(S)>, <&kp LG(S)>, <&kp LC(S)>;
-        };
-
-        ok_save_as: os_key_save_as {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win                Mac               Lin  */
-            bindings = <&kp LS(LC(S))>, <&kp LS(LG(S))>, <&kp LS(LC(S))>;
-        };
-
-        ok_print: os_key_print {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac           Lin  */
-            bindings = <&kp LC(P)>, <&kp LG(P)>, <&kp LC(P)>;
-        };
-
-        ok_zoom_in: os_key_zoom_in {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                Win              Mac              Lin  */
-            bindings = <&kp LC(EQUAL)>, <&kp LG(EQUAL)>, <&kp LC(EQUAL)>;
-        };
-
-        ok_zoom_out: os_key_zoom_out {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                Win              Mac              Lin  */
-            bindings = <&kp LC(MINUS)>, <&kp LG(MINUS)>, <&kp LC(MINUS)>;
-        };
-
-        ok_zoom_reset: os_key_zoom_reset {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win            Mac            Lin  */
-            bindings = <&kp LC(N0)>, <&kp LG(N0)>, <&kp LC(N0)>;
-        };
+        // behavior name      , Default       ,,, MacOS         ,
+        OSKEY(ok_sel_all      , &kp LC(A)     ,,, &kp LG(A)     , )
+        OSKEY(ok_find         , &kp LC(F)     ,,, &kp LG(F)     , )
+        OSKEY(ok_find_replace , &kp LC(H)     ,,, &kp LG(H)     , )
+        OSKEY(ok_bold         , &kp LC(B)     ,,, &kp LG(B)     , )
+        OSKEY(ok_italic       , &kp LC(I)     ,,, &kp LG(I)     , )
+        OSKEY(ok_underline    , &kp LC(U)     ,,, &kp LG(U)     , )
+        OSKEY(ok_new_win      , &kp LC(N)     ,,, &kp LG(N)     , )
+        OSKEY(ok_new_tab      , &kp LC(T)     ,,, &kp LG(T)     , )
+        OSKEY(ok_close        , &kp LC(W)     ,,, &kp LG(W)     , )
+        OSKEY(ok_quit         , &kp LA(F4)    ,,, &kp LG(Q)     , )
+        OSKEY(ok_reopen_tab   , &kp LS(LC(T)) ,,, &kp LS(LG(T)) , )
+        OSKEY(ok_open         , &kp LC(O)     ,,, &kp LG(O)     , )
+        OSKEY(ok_save         , &kp LC(S)     ,,, &kp LG(S)     , )
+        OSKEY(ok_save_as      , &kp LS(LC(S)) ,,, &kp LS(LG(S)) , )
+        OSKEY(ok_print        , &kp LC(P)     ,,, &kp LG(P)     , )
+        OSKEY(ok_zoom_in      , &kp LC(EQUAL) ,,, &kp LG(EQUAL) , )
+        OSKEY(ok_zoom_out     , &kp LC(MINUS) ,,, &kp LG(MINUS) , )
+        OSKEY(ok_zoom_reset   , &kp LC(N0)    ,,, &kp LG(N0)    , )
 
         /* ── Navigation ─────────────────────────────────────────────── */
-
-        ok_prev_word: os_key_prev_word {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win            Mac            Lin  */
-            bindings = <&kp LC(LEFT)>, <&kp LA(LEFT)>, <&kp LC(LEFT)>;
-        };
-
-        ok_next_word: os_key_next_word {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win             Mac             Lin  */
-            bindings = <&kp LC(RIGHT)>, <&kp LA(RIGHT)>, <&kp LC(RIGHT)>;
-        };
-
-        ok_line_start: os_key_line_start {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*              Win          Mac             Lin  */
-            bindings = <&kp HOME>, <&kp LG(LEFT)>, <&kp HOME>;
-        };
-
-        ok_line_end: os_key_line_end {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*             Win           Mac              Lin  */
-            bindings = <&kp END>, <&kp LG(RIGHT)>, <&kp END>;
-        };
-
-        ok_doc_start: os_key_doc_start {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                Win           Mac          Lin  */
-            bindings = <&kp LC(HOME)>, <&kp LG(UP)>, <&kp LC(HOME)>;
-        };
-
-        ok_doc_end: os_key_doc_end {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*               Win             Mac            Lin  */
-            bindings = <&kp LC(END)>, <&kp LG(DOWN)>, <&kp LC(END)>;
-        };
+        // behavior name    , Default       ,,, MacOS         ,
+        OSKEY(ok_prev_word  , &kp LC(LEFT)  ,,, &kp LA(LEFT)  , )
+        OSKEY(ok_next_word  , &kp LC(RIGHT) ,,, &kp LA(RIGHT) , )
+        OSKEY(ok_line_start , &kp HOME      ,,, &kp LG(LEFT)  , )
+        OSKEY(ok_line_end   , &kp END       ,,, &kp LG(RIGHT) , )
+        OSKEY(ok_doc_start  , &kp LC(HOME)  ,,, &kp LG(UP)    , )
+        OSKEY(ok_doc_end    , &kp LC(END)   ,,, &kp LG(DOWN)  , )
 
         /* ── Selection (Shift + Navigation) ─────────────────────────── */
-
-        ok_sel_prev_word: os_key_sel_prev_word {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                       Win                   Mac                   Lin  */
-            bindings = <&kp LS(LC(LEFT))>, <&kp LS(LA(LEFT))>, <&kp LS(LC(LEFT))>;
-        };
-
-        ok_sel_next_word: os_key_sel_next_word {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                        Win                    Mac                    Lin  */
-            bindings = <&kp LS(LC(RIGHT))>, <&kp LS(LA(RIGHT))>, <&kp LS(LC(RIGHT))>;
-        };
-
-        ok_sel_line_start: os_key_sel_line_start {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                   Win              Mac                Lin  */
-            bindings = <&kp LS(HOME)>, <&kp LS(LG(LEFT))>, <&kp LS(HOME)>;
-        };
-
-        ok_sel_line_end: os_key_sel_line_end {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win             Mac                 Lin  */
-            bindings = <&kp LS(END)>, <&kp LS(LG(RIGHT))>, <&kp LS(END)>;
-        };
-
-        ok_sel_doc_start: os_key_sel_doc_start {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                     Win                Mac               Lin  */
-            bindings = <&kp LS(LC(HOME))>, <&kp LS(LG(UP))>, <&kp LS(LC(HOME))>;
-        };
-
-        ok_sel_doc_end: os_key_sel_doc_end {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                    Win                 Mac                Lin  */
-            bindings = <&kp LS(LC(END))>, <&kp LS(LG(DOWN))>, <&kp LS(LC(END))>;
-        };
+        // behavior name       , Default           ,,, MacOS             ,
+        OSKEY(ok_sel_prev_word , &kp LS(LC(LEFT))  ,,, &kp LS(LA(LEFT))  , )
+        OSKEY(ok_sel_next_word , &kp LS(LC(RIGHT)) ,,, &kp LS(LA(RIGHT)) , )
+        OSKEY(ok_sel_line_start, &kp LS(HOME)      ,,, &kp LS(LG(LEFT))  , )
+        OSKEY(ok_sel_line_end  , &kp LS(END)       ,,, &kp LS(LG(RIGHT)) , )
+        OSKEY(ok_sel_doc_start , &kp LS(LC(HOME))  ,,, &kp LS(LG(UP))    , )
+        OSKEY(ok_sel_doc_end   , &kp LS(LC(END))   ,,, &kp LS(LG(DOWN))  , )
 
         /* ── Window management ───────────────────────────────────────── */
         /* Linux shortcuts are DE-specific; override in your keymap.     */
+
+        // Only Windows is changed here
+        OSKEY(ok_next_app , &kp LG(TAB)     ,, &kp LA(TAB)     ,, )
+        OSKEY(ok_prev_app , &kp LS(LG(TAB)) ,, &kp LS(LA(TAB)) ,, )
+
+        // behavior name      ,       , Linux         , Windows         , MacOS           ,
+        OSKEY(ok_next_tab     , &none , &kp LC(PG_DN) , &kp LC(RBRC)    , &kp LG(RBRC)    , )
+        OSKEY(ok_prev_tab     , &none , &kp LC(PG_UP) , &kp LC(LBRC)    , &kp LG(LBRC)    , )
+        OSKEY(ok_mission_ctrl , &none , &kp LGUI      , &kp LG(TAB)     , &kp LC(UP)      , )
+        OSKEY(ok_force_quit   , &none , &kp LC(ESC)   , &kp LS(LC(ESC)) , &kp LA(LG(ESC)) , )
+
+        // Only MacOS is changed here
+        OSKEY(ok_desktop, &kp LG(D) ,,, &kp LG(LC(D)) , )
+        OSKEY(ok_lock   , &kp LG(L) ,,, &kp LG(LC(Q)) , )
 
         ok_ltm: os_layer_mod {
             compatible = "zmk,behavior-os-layer-mod";
@@ -294,62 +120,6 @@
             tapping-term-ms = <200>;
             /*              Win           Mac           Lin  */
             bindings = <&kp LALT>, <&kp LGUI>, <&kp LGUI>;
-        };
-
-        ok_next_app: os_key_next_app {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*            Win           Mac           Lin  */
-            bindings = <&kp LA(TAB)>, <&kp LG(TAB)>, <&kp LG(TAB)>;
-        };
-
-        ok_prev_app: os_key_prev_app {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*            Win           Mac           Lin  */
-            bindings = <&kp LS(LA(TAB))>, <&kp LS(LG(TAB))>, <&kp LS(LG(TAB))>;
-        };
-
-        ok_next_tab: os_key_next_tab {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*            Win           Mac              Lin  */
-            bindings = <&kp LC(RBRC)>, <&kp LG(RBRC)>, <&kp LC(PG_DN)>;
-        };
-
-        ok_prev_tab: os_key_prev_tab {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*            Win           Mac              Lin  */
-            bindings = <&kp LC(LBRC)>, <&kp LG(LBRC)>, <&kp LC(PG_UP)>;
-        };
-
-        ok_mission_ctrl: os_key_mission_control {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                 Win            Mac          Lin (DE-specific) */
-            bindings = <&kp LG(TAB)>, <&kp LC(UP)>, <&kp LGUI>;
-        };
-
-        ok_desktop: os_key_desktop {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*              Win           Mac             Lin (DE-specific) */
-            bindings = <&kp LG(D)>, <&kp LG(LC(D))>, <&kp LG(D)>;
-        };
-
-        ok_lock: os_key_lock {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*               Win           Mac              Lin (Ubuntu/GNOME default) */
-            bindings = <&kp LG(L)>, <&kp LG(LC(Q))>, <&kp LG(L)>;
-        };
-
-        ok_force_quit: os_key_force_quit {
-            compatible = "zmk,behavior-os-key";
-            #binding-cells = <0>;
-            /*                  Win (Task Mgr)    Mac (Force Quit)    Lin (KDE: Sys Activity) */
-            bindings = <&kp LS(LC(ESC))>, <&kp LA(LG(ESC))>, <&kp LC(ESC)>;
         };
     };
 };

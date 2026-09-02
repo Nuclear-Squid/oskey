@@ -14,9 +14,11 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 struct behavior_os_key_config {
+    struct zmk_behavior_binding uns_binding;
+    struct zmk_behavior_binding lin_binding;
     struct zmk_behavior_binding win_binding;
     struct zmk_behavior_binding mac_binding;
-    struct zmk_behavior_binding lin_binding;
+    struct zmk_behavior_binding ios_binding;
 };
 
 /*
@@ -61,13 +63,16 @@ static void release_active_os_key(struct active_os_key *key) { key->active = fal
 static const struct zmk_behavior_binding *
 select_binding(const struct behavior_os_key_config *cfg) {
     switch (zmk_oskey_get_os()) {
+    case OSKEY_OS_IOS:
+        return &cfg->ios_binding;
     case OSKEY_OS_MACOS:
         return &cfg->mac_binding;
     case OSKEY_OS_LINUX:
         return &cfg->lin_binding;
     case OSKEY_OS_WINDOWS:
-    default:
         return &cfg->win_binding;
+    default:
+        return &cfg->uns_binding;
     }
 }
 
@@ -106,24 +111,28 @@ static const struct behavior_driver_api behavior_os_key_driver_api = {
 
 static int behavior_os_key_init(const struct device *dev) { return 0; }
 
-#define _OS_KEY_BINDING(n, idx)                                                                    \
-    {                                                                                              \
-        .behavior_dev = DEVICE_DT_NAME(DT_INST_PHANDLE_BY_IDX(n, bindings, idx)),                 \
-        .param1 = COND_CODE_0(DT_INST_PHA_HAS_CELL_AT_IDX(n, bindings, idx, param1), (0),         \
-                              (DT_INST_PHA_BY_IDX(n, bindings, idx, param1))),                    \
-        .param2 = COND_CODE_0(DT_INST_PHA_HAS_CELL_AT_IDX(n, bindings, idx, param2), (0),         \
-                              (DT_INST_PHA_BY_IDX(n, bindings, idx, param2))),                    \
+#define _OS_KEY_BINDING(n, idx) {                                                 \
+        .behavior_dev = DEVICE_DT_NAME(DT_INST_PHANDLE_BY_IDX(n, bindings, idx)), \
+        .param1 = DT_INST_PHA_BY_IDX_OR(n, bindings, idx, param1, 0),             \
+        .param2 = DT_INST_PHA_BY_IDX_OR(n, bindings, idx, param2, 0),             \
     }
 
-#define OS_KEY_INST(n)                                                                             \
-    static struct behavior_os_key_config behavior_os_key_config_##n = {                           \
-        .win_binding = _OS_KEY_BINDING(n, 0),                                                      \
-        .mac_binding = _OS_KEY_BINDING(n, 1),                                                      \
-        .lin_binding = _OS_KEY_BINDING(n, 2),                                                      \
-    };                                                                                             \
-    BEHAVIOR_DT_INST_DEFINE(n, behavior_os_key_init, NULL, NULL,                                   \
-                            &behavior_os_key_config_##n, POST_KERNEL,                              \
-                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,                                   \
+#define OS_KEY_BINDING(n, idx)                                                    \
+    COND_CODE_1(DT_INST_PROP_HAS_IDX(n, bindings, idx),                           \
+        (_OS_KEY_BINDING(n, idx)),                                                \
+        (_OS_KEY_BINDING(n, 0)))
+
+#define OS_KEY_INST(n)                                                            \
+    static struct behavior_os_key_config behavior_os_key_config_##n = {           \
+        .uns_binding = OS_KEY_BINDING(n, 0),                                      \
+        .lin_binding = OS_KEY_BINDING(n, 1),                                      \
+        .win_binding = OS_KEY_BINDING(n, 2),                                      \
+        .mac_binding = OS_KEY_BINDING(n, 3),                                      \
+        .ios_binding = OS_KEY_BINDING(n, 4),                                      \
+    };                                                                            \
+    BEHAVIOR_DT_INST_DEFINE(n, behavior_os_key_init, NULL, NULL,                  \
+                            &behavior_os_key_config_##n, POST_KERNEL,             \
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT,                  \
                             &behavior_os_key_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(OS_KEY_INST)

@@ -10,6 +10,8 @@
 
 #pragma once
 
-#define OS_WIN 0
-#define OS_MAC 1
-#define OS_LIN 2
+#define OS_UNS 0
+#define OS_LIN 1
+#define OS_WIN 2
+#define OS_MAC 3
+#define OS_IOS 4
