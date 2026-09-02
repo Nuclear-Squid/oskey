@@ -15,17 +15,26 @@
 #include <zephyr/sys/util_macro.h>
 #include <dt-bindings/zmk/keys.h>
 
-#define OSKEY(name, uns, lin, win, mac, ios)        \
-  name: name {                                      \
-    compatible = "zmk,behavior-os-key";             \
-    #binding-cells = <0>;                           \
-    bindings = <uns>                                \
-      , <COND_CODE_0(IS_EMPTY(lin), (lin), (uns))>  \
-      , <COND_CODE_0(IS_EMPTY(win), (win), (uns))>  \
-      , <COND_CODE_0(IS_EMPTY(mac), (mac), (uns))>  \
-      , <COND_CODE_0(IS_EMPTY(ios), (ios), (uns))>  \
-    ;                                               \
-  };
+#define _OSKEY(ncells, name, uns, lin, win, mac, ios)     \
+    name: name {                                          \
+        compatible = "zmk,behavior-os-key";               \
+        #binding-cells = <ncells>;                        \
+        bindings = <uns>                                  \
+            , <COND_CODE_0(IS_EMPTY(lin), (lin), (uns))>  \
+            , <COND_CODE_0(IS_EMPTY(win), (win), (uns))>  \
+            , <COND_CODE_0(IS_EMPTY(mac), (mac), (uns))>  \
+            , <COND_CODE_0(IS_EMPTY(ios), (ios), (uns))>  \
+        ;                                                 \
+    };
+
+#define OSKEY(name, uns, lin, win, mac, ios) \
+    _OSKEY(0, name, uns, lin, win, mac, ios)
+
+#define OSKEY_1_PARAM(name, uns, lin, win, mac, ios) \
+    _OSKEY(1, name, uns, lin, win, mac, ios)
+
+#define OSKEY_2_PARAM(name, uns, lin, win, mac, ios) \
+    _OSKEY(2, name, uns, lin, win, mac, ios)
 
 / {
     behaviors {

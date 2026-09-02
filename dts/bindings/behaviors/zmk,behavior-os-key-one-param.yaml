@@ -1,2 +1,2 @@
-compatible: "zmk,behavior-os-key"
+compatible: "zmk,behavior-os-key-one-param"
 include: [os-key-base.yaml, zero_param.yaml]
