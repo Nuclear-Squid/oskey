@@ -16,5 +16,5 @@
 #define OS_MAC 3
 #define OS_IOS 4
 
-#define OSKEY_PARAM1 (-1)
-#define OSKEY_PARAM2 (-2)
+#define OSKEY_1ST_PARAM (-1)
+#define OSKEY_2ND_PARAM (-2)

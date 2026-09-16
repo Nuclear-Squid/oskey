@@ -77,17 +77,17 @@ select_binding(const struct behavior_os_key_config *cfg) {
 
 static void replace_placeholder_params(struct zmk_behavior_binding *binding,
                                        uint32_t param1, uint32_t param2) {
-    if (binding->param1 == OSKEY_PARAM1) {
+    if (binding->param1 == OSKEY_1ST_PARAM) {
         binding->param1 = param1;
     }
-    else if (binding->param1 == OSKEY_PARAM2) {
+    else if (binding->param1 == OSKEY_2ND_PARAM) {
         binding->param1 = param2;
     }
 
-    if (binding->param2 == OSKEY_PARAM1) {
+    if (binding->param2 == OSKEY_1ST_PARAM) {
         binding->param2 = param1;
     }
-    else if (binding->param2 == OSKEY_PARAM2) {
+    else if (binding->param2 == OSKEY_2ND_PARAM) {
         binding->param1 = param2;
     }
 }
