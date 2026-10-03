@@ -88,7 +88,7 @@ static void replace_placeholder_params(struct zmk_behavior_binding *binding,
         binding->param2 = param1;
     }
     else if (binding->param2 == OSKEY_2ND_PARAM) {
-        binding->param1 = param2;
+        binding->param2 = param2;
     }
 }
 
