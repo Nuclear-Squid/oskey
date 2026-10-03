@@ -51,15 +51,6 @@
         ;                                                 \
     };
 
-/* #define OSKEY(name, uns, lin, win, mac, ios) \ */
-/*     _OSKEY(0, name, uns, lin, win, mac, ios) */
-/**/
-/* #define OSKEY_1_PARAM(name, uns, lin, win, mac, ios) \ */
-/*     _OSKEY(1, name, uns, lin, win, mac, ios) */
-/**/
-/* #define OSKEY_2_PARAM(name, uns, lin, win, mac, ios) \ */
-/*     _OSKEY(2, name, uns, lin, win, mac, ios) */
-
 / {
     behaviors {
 
